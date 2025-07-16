@@ -1,0 +1,56 @@
+.wrapper{
+    text-align: center;
+}
+.basic{
+    outline: 5px solid black;
+    height: 150px;
+    width: 150px;
+    border-radius:15px ;
+   
+}
+
+.colors{
+    /* border: 1px solid black; */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    
+}
+.upper{
+     display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+.lower{
+    display: flex;
+    flex-direction: row;
+    margin-top:20px ;
+    gap: 25px;
+}
+
+.red{
+    background-color: coral;
+}
+.green{
+    background-color: rgb(220, 232, 50);
+}
+.yellow{
+    background-color: rgb(134, 199, 5);
+}
+.blue{
+    background-color: rgba(128, 0, 105, 0.804);
+}
+.flash{
+    background-color: white;
+}
+.userflash{
+    background-color: green;
+}
+#para{
+    font-weight: 700;
+    font-size: larger;
+    margin-top: 50px;
+}
