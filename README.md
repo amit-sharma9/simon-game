@@ -11,7 +11,7 @@ Test your memory skills by remembering and repeating the color sequence shown by
 
 Check out the live site here: [Netlify Link](https://play-simon-now.netlify.app/)
 
-[![Netlify Status](https://img.shields.io/netlify/94a4c390-0a5a-45f4-bde4-cb7bc214f245?style=for-the-badge)](https://play-simon-now.netlify.app/)
+[![Netlify Status](https://img.shields.io/netlify/6c96c3d6-7086-4d59-a42e-9ab5369b006b?style=for-the-badge)](https://play-simon-now.netlify.app/)
 
 ---
 
