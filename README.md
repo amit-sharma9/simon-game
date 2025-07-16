@@ -6,6 +6,15 @@ A simple and fun **Simon Game** built using **HTML, CSS, and JavaScript**.
 Test your memory skills by remembering and repeating the color sequence shown by the game!
 
 ---
+ 
+## Live Demo 🚀
+
+Check out the live site here: [Netlify Link](https://play-simon-now.netlify.app/)
+
+[![Netlify Status](https://img.shields.io/netlify/94a4c390-0a5a-45f4-bde4-cb7bc214f245?style=for-the-badge)](https://play-simon-now.netlify.app/)
+
+---
+
 
 ## 🚀 Features
 
