@@ -1,41 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="game.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-    <title> Let's Play</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="game.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <title>Simon Game</title>
 </head>
-
 <body>
-    <div class="wrapper">
-
-        <h1>Simon Game</h1>
-       <h2>Press any keyboard key to start the Game</h2>
-
-
-        <div class="colors">
-            <div class="upper ">
-                <div class="red basic" type="button" id="red"></div>
-                <div class="green basic" type="button" id="green"></div>
-            </div>
-            <div class="lower">
-                <div class="yellow basic" type="button" id="yellow"></div>
-                <div class="blue basic" type="button" id="blue"></div>
-            </div>
-
-        </div>
-        <!-- <ul style="list-style: none;"> Game instructions
-            <li> Remember the sequence from starting and click according to it</li>
-
-        </ul> -->
-        <p id="para"> </p>
+  <div class="wrapper">
+    <h1>Simon Game</h1>
+    <div id="highscore-display">Highscore: 0</div>
+    <h2 id="start-msg">Press any key or tap to start</h2>
+    <div class="colors">
+      <div class="upper">
+        <div class="red basic" id="red"></div>
+        <div class="green basic" id="green"></div>
+      </div>
+      <div class="lower">
+        <div class="yellow basic" id="yellow"></div>
+        <div class="blue basic" id="blue"></div>
+      </div>
     </div>
-
-    <script src="game.js"></script>
+    <p id="para"></p>
+  </div>
+  <script src="game.js"></script>
 </body>
-
 </html>

@@ -1,85 +1,129 @@
-let body = document.querySelector("body");
-let h2 = document.querySelector("h2");
-let start = false;
-let level = 0;
-let buttons = document.querySelectorAll('.basic');
-let userseq = [];
-let gameseq = [];
-let highscore=0;
-let para = document.querySelector("#para");
-let audio  = new Audio("wrong-38598.mp3");
+// Elements
+const body = document.body;
+const h2   = document.getElementById("start-msg");
+const para = document.getElementById("para");
+const highDisp = document.getElementById("highscore-display");
+const buttons  = document.querySelectorAll(".basic");
 
-body.addEventListener("keypress", function () {
-    if (start == false) {
-        start = true;
-        levelup();
-        for (btn of buttons) {
-            btn.addEventListener("click", pressed);
-        }
+// Game state
+let sequence  = [];
+let userSeq   = [];
+let level      = 0;
+let started    = false;
+let highscore = Number(localStorage.getItem("highscore")) || 0;
+
+// Audio
+const audioWrong = new Audio("wrong-38598.mp3");
+
+// Initialize highscore display
+highDisp.innerText = `Highscore: ${highscore}`;
+
+// Utility to flash a button
+function flashButton(btn) {
+  btn.classList.add("flash");
+  setTimeout(() => btn.classList.remove("flash"), 200);
+}
+
+// Utility to flash user click
+function flashUser(btn) {
+  btn.classList.add("userflash");
+  setTimeout(() => btn.classList.remove("userflash"), 200);
+}
+
+// Update start message dynamically
+function updateStartMsg() {
+  h2.innerText = window.innerWidth <= 768
+    ? "Tap anywhere to start"
+    : "Press any key to start";
+}
+updateStartMsg();
+window.addEventListener("resize", updateStartMsg);
+
+// Build restart message
+function restartMsg(score) {
+  return `Game over!<br>Your score: ${score}. ${
+    window.innerWidth <= 768 ? "Tap" : "Press"
+  } to restart.`;
+}
+
+// Add start listeners once
+function addStartListeners() {
+  body.addEventListener("keypress", startHandler, { once: true });
+  body.addEventListener("touchstart", startHandler, { once: true });
+  body.addEventListener("click", startHandler, { once: true });
+}
+// Handler that ignores taps on color squares
+function startHandler(e) {
+  if (
+    (e.type === "click" || e.type === "touchstart") &&
+    e.target.classList.contains("basic")
+  ) return;
+  
+  if (!started) {
+    started = true;
+    para.innerText = "";
+    nextLevel();
+  }
+}
+addStartListeners();
+
+// Advance to next level: only flash new color
+function nextLevel() {
+  userSeq = [];
+  level++;
+  h2.innerText = `Level ${level}`;
+
+  // pick & flash single new color
+  const idx = Math.floor(Math.random() * buttons.length);
+  const btn = buttons[idx];
+  sequence.push(btn.id);
+  flashButton(btn);
+
+  // now listen for user clicks
+  buttons.forEach(b => b.addEventListener("click", handleUserClick));
+}
+
+// When user clicks a color
+function handleUserClick(e) {
+  const btn = e.target;
+  flashUser(btn);
+  userSeq.push(btn.id);
+
+  const i = userSeq.length - 1;
+  if (userSeq[i] !== sequence[i]) {
+    // wrong answer
+    audioWrong.play();
+    document.body.style.backgroundColor = "red";
+    setTimeout(() => (document.body.style.backgroundColor = "white"), 150);
+
+    // update highscore if beaten
+    if (level > highscore) {
+      highscore = level;
+      localStorage.setItem("highscore", highscore);
+      highDisp.innerText = `Highscore: ${highscore}`;
     }
-});
 
-function levelup() {
-    userseq = [];
-    level++;
-    h2.innerText = `level ${level}`;
-    let random = Math.floor(Math.random() * 4);
-    let randcolor=buttons[random];
-    let randcolorid=buttons[random].id;
-    gameseq.push(randcolorid);
-    btnflash(randcolor);
+    // show restart prompt
+    h2.innerHTML = restartMsg(level);
+    para.innerText = ""; // clear any other text
+
+    cleanUp();
+    addStartListeners();
+  } else if (userSeq.length === sequence.length) {
+    // correct full sequence
+    document.body.style.backgroundColor = "lightgreen";
+    setTimeout(() => (document.body.style.backgroundColor = "white"), 150);
+
+    // go to next level after short delay
+    setTimeout(nextLevel, 600);
+  }
 }
 
-function chechkAns(idx){
-    if (userseq[idx]=== gameseq[idx]) {
-       if (userseq.length == gameseq.length) {
-        setTimeout(levelup,1000);
-       }
-    }
-    else{
-        if (highscore<level) {
-            highscore=level;
-            // localStorage.setItem("Highscore",highscore);
-        }
-      audio.play();
-        para.innerText = `High score till now is ${highscore}`; 
-        h2.innerHTML = `Game over !<br> your score is ${level}. Press any key to start again`;
-        document.querySelector("body").style.backgroundColor="red";
-        setTimeout(() => {
-            document.querySelector("body").style.backgroundColor="white"; 
-             
-        }, 150);
-        reset();
-    }
+// Remove click listeners and reset state
+function cleanUp() {
+  started = false;
+  level   = 0;
+  sequence = [];
+  userSeq  = [];
+  buttons.forEach(b => b.removeEventListener("click", handleUserClick));
 }
-function btnflash(btn) {
-    btn.classList.add("flash");
-    setTimeout(function () {
-        btn.classList.remove("flash")
-    }, 200);
-
-}
-function userflash(btn) {
-    btn.classList.add("userflash");
-    setTimeout(function () {
-        btn.classList.remove("userflash")
-    }, 200);
-}
-
-function pressed() { 
-    let btn = this;
-    userflash(btn);
-   let colorvalue = btn.getAttribute("id");
-   userseq.push(colorvalue);
-    let idx = userseq.length-1;
-    chechkAns(idx);
-}
-
-function reset(){
-    start = false;
-    level=0;
-    gameseq = [];
-    userseq = [];
-}
-
-// let nhighscore = localStorage.getItem("highscore")
