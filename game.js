@@ -5,6 +5,11 @@ const para = document.getElementById("para");
 const highDisp = document.getElementById("highscore-display");
 const buttons  = document.querySelectorAll(".basic");
 
+// Detect if device is mobile
+function isMobileDevice() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 // Game state
 let sequence  = [];
 let userSeq   = [];
@@ -31,10 +36,15 @@ function flashUser(btn) {
 }
 
 // Update start message dynamically
+
 function updateStartMsg() {
-  h2.innerText = window.innerWidth <= 768
-    ? "Tap anywhere to start"
-    : "Press any key to start";
+  if (started) return;
+   if (isMobileDevice()) {
+    h2.innerText = "📱 Tap anywhere to start";
+  } else {
+    h2.innerText = "💻 Press any key or click to start";
+  }
+    
 }
 updateStartMsg();
 window.addEventListener("resize", updateStartMsg);
@@ -42,26 +52,26 @@ window.addEventListener("resize", updateStartMsg);
 // Build restart message
 function restartMsg(score) {
   return `Game over!<br>Your score: ${score}. ${
-    window.innerWidth <= 768 ? "Tap" : "Press"
+    isMobileDevice() ? "Tap" : "Press or click"
   } to restart.`;
 }
 
 // Add start listeners once
 function addStartListeners() {
-  body.addEventListener("keypress", startHandler, { once: true });
-  body.addEventListener("touchstart", startHandler, { once: true });
-  body.addEventListener("click", startHandler, { once: true });
+  if (isMobileDevice()) {
+    // On mobile: only touchstart
+    body.addEventListener("touchstart", startHandler, { once: true });
+  } else {
+    // On desktop: keypress and click
+    body.addEventListener("keypress", startHandler, { once: true });
+    body.addEventListener("click", startHandler, { once: true });
+  }
 }
 // Handler that ignores taps on color squares
 function startHandler(e) {
-  if (
-    (e.type === "click" || e.type === "touchstart") &&
-    e.target.classList.contains("basic")
-  ) return;
-  
-  if (!started) {
+    if (!started) {
     started = true;
-    para.innerText = "";
+        h2.innerText = "";  
     nextLevel();
   }
 }
@@ -104,11 +114,17 @@ function handleUserClick(e) {
     }
 
     // show restart prompt
-    h2.innerHTML = restartMsg(level);
-    para.innerText = ""; // clear any other text
+    
 
-    cleanUp();
-    addStartListeners();
+    
+   h2.innerHTML = restartMsg(level);
+
+cleanUp();
+
+// wait a tick before listening for restart, so this event won’t re‑trigger it
+setTimeout(() => {
+  addStartListeners();
+}, 200);
   } else if (userSeq.length === sequence.length) {
     // correct full sequence
     document.body.style.backgroundColor = "lightgreen";
